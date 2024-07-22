@@ -1,0 +1,24 @@
+{
+    "KPackageStructure": "Plasma/Applet",
+    "KPlugin": {
+        "Authors": [
+            {
+                 "Email": "zayronxio@gmail.com",
+                "Name": "zayronxio"
+            }
+        ],
+        "BugReportUrl": "",
+        "Category": "Application Launchers",
+        "Description": "Configurable grid of application icons.",
+        "EnabledByDefault": true,
+        "Icon": "start-here-kde",
+        "Id": "Start.Next.Menu",
+        "License": "GPL-2.0+",
+        "Name": "Start Next Menu",
+        "Website": ""
+    },
+    "X-Plasma-API-Minimum-Version": "6.0",
+    "X-Plasma-Provides": [
+        "org.kde.plasma.launchermenu"
+    ]
+}
