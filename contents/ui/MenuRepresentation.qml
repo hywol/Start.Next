@@ -26,6 +26,7 @@ import Qt5Compat.GraphicalEffects
 Item{
     id: main
     property int sizeImage: Kirigami.Units.iconSizes.large * 2
+    property int menuPos: 2
 
     onVisibleChanged: {
         root.visible = !root.visible
@@ -109,11 +110,67 @@ Item{
             var screenAvail = kicker.availableScreenRect;
             var screen= kicker.screenGeometry;
             var panelH = screen.height - screenAvail.height
+            var panelW = screen.width - screenAvail.width
             var horizMidPoint = screen.x + (screen.width / 2);
             var vertMidPoint = screen.y + (screen.height / 2);
-            x = horizMidPoint - width / 2;
-            y = screen.height - height - panelH - Kirigami.Units.gridUnit*1.5
-            return Qt.point(x, y);
+            var appletTopLeft = parent.mapToGlobal(0, 0);
+            var screenRec = Qt.rect(screenAvail.x + screen.x,
+                                 screenAvail.y + screen.y,
+                                 screenAvail.width,
+                                 screenAvail.height);
+            if (menuPos === 0) {
+                if (plasmoid.location === PlasmaCore.Types.BottomEdge) {
+                    if (appletTopLeft.x < screen.width - width) {
+                        x = appletTopLeft.x
+                    } else {
+                        x = screen.width - width - 8
+                    }
+                    y = screen.height - height - panelH - Kirigami.Units.gridUnit/2
+                    return Qt.point(x, y);
+                } else {
+                    if (plasmoid.location === PlasmaCore.Types.TopEdge) {
+                        if (appletTopLeft.x < screen.width - width) {
+                            x = appletTopLeft.x + panelW - Kirigami.Units.gridUnit/3
+                        } else {
+                            x = screen.width - width
+                        }
+                        y = panelH + Kirigami.Units.gridUnit/2
+                        return Qt.point(x, y);
+                    } else {
+                        if (plasmoid.location === PlasmaCore.Types.LeftEdge) {
+                            x = appletTopLeft.x + panelW + Kirigami.Units.gridUnit/2
+                            if (appletTopLeft.y < screen.height - height) {
+                                y = appletTopLeft.y
+                            } else {
+                                y = appletTopLeft.y - height + iconUser.height/2
+                            }
+                        } else {
+
+                            if (plasmoid.location === PlasmaCore.Types.RightEdge) {
+                                x = appletTopLeft.x - width - Kirigami.Units.gridUnit/2
+                                if (appletTopLeft.y < screen.height - height) {
+                                    y = appletTopLeft.y
+                                } else {
+                                    y = screen.height - height - Kirigami.Units.gridUnit/5
+                                }
+                            }
+                        }
+                    }
+                }
+            } else {
+               if (menuPos === 2) {
+                   x = horizMidPoint - width / 2;
+                   y = screen.height - height - panelH - Kirigami.Units.gridUnit/2
+                   return Qt.point(x, y);
+            } else{
+               if (menuPos === 1)  {
+                   x = horizMidPoint - width / 2;
+                   y = vertMidPoint - height /2;
+            }
+            }
+            }
+            
+
         }
 
         FocusScope {
