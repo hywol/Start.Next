@@ -37,7 +37,7 @@ Item {
                                                   && Plasmoid.configuration.customButtonImage.length != 0)
     property QtObject dashWindow: null
 
-    Plasmoid.status: dashWindow && dashWindow.visible ? PlasmaCore.Types.RequiresAttentionStatus : PlasmaCore.Types.PassiveStatus
+    //Plasmoid.status: dashWindow && dashWindow.visible ? PlasmaCore.Types.RequiresAttentionStatus : PlasmaCore.Types.PassiveStatus
     Kirigami.Icon {
         id: buttonIcon
 

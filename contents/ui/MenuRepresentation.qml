@@ -48,6 +48,8 @@ Item {
         property var value: Plasmoid.configuration.viewUser ? 0 : 1
     }
 
+    Plasmoid.status: root.visible ? PlasmaCore.Types.RequiresAttentionStatus : PlasmaCore.Types.PassiveStatus
+
     PlasmaCore.Dialog {
         id: root
 
