@@ -1,4 +1,7 @@
-
+/*
+ *  SPDX-FileCopyrightText: zayronxio
+ *  SPDX-License-Identifier: GPL-3.0-or-later
+ */
 import QtQuick 2.4
 import QtQuick.Layouts 1.1
 import org.kde.plasma.plasmoid 2.0
@@ -23,10 +26,10 @@ import org.kde.kcmutils as KCM
 import org.kde.plasma.plasmoid
 import Qt5Compat.GraphicalEffects
 
-Item{
+Item {
     id: main
     property int sizeImage: Kirigami.Units.iconSizes.large * 2
-    property int menuPos: 2
+    property int menuPos: Plasmoid.configuration.displayPosition
 
     onVisibleChanged: {
         root.visible = !root.visible
@@ -108,69 +111,51 @@ Item{
 
         function popupPosition(width, height) {
             var screenAvail = kicker.availableScreenRect;
-            var screen= kicker.screenGeometry;
-            var panelH = screen.height - screenAvail.height
-            var panelW = screen.width - screenAvail.width
+            var screen = kicker.screenGeometry;
+            var panelH = screen.height - screenAvail.height;
+            var panelW = screen.width - screenAvail.width;
             var horizMidPoint = screen.x + (screen.width / 2);
             var vertMidPoint = screen.y + (screen.height / 2);
             var appletTopLeft = parent.mapToGlobal(0, 0);
-            var screenRec = Qt.rect(screenAvail.x + screen.x,
-                                 screenAvail.y + screen.y,
-                                 screenAvail.width,
-                                 screenAvail.height);
+
+            function calculatePosition(x, y) {
+                return Qt.point(x, y);
+            }
+
             if (menuPos === 0) {
-                if (plasmoid.location === PlasmaCore.Types.BottomEdge) {
-                    if (appletTopLeft.x < screen.width - width) {
-                        x = appletTopLeft.x
-                    } else {
-                        x = screen.width - width - 8
-                    }
-                    y = screen.height - height - panelH - Kirigami.Units.gridUnit/2
-                    return Qt.point(x, y);
-                } else {
-                    if (plasmoid.location === PlasmaCore.Types.TopEdge) {
-                        if (appletTopLeft.x < screen.width - width) {
-                            x = appletTopLeft.x + panelW - Kirigami.Units.gridUnit/3
-                        } else {
-                            x = screen.width - width
-                        }
-                        y = panelH + Kirigami.Units.gridUnit/2
-                        return Qt.point(x, y);
-                    } else {
-                        if (plasmoid.location === PlasmaCore.Types.LeftEdge) {
-                            x = appletTopLeft.x + panelW + Kirigami.Units.gridUnit/2
-                            if (appletTopLeft.y < screen.height - height) {
-                                y = appletTopLeft.y
-                            } else {
-                                y = appletTopLeft.y - height + iconUser.height/2
-                            }
-                        } else {
+                switch (plasmoid.location) {
+                    case PlasmaCore.Types.BottomEdge:
+                        var x = appletTopLeft.x < screen.width - width ? appletTopLeft.x : screen.width - width - 8;
+                        var y = screen.height - height - panelH - Kirigami.Units.gridUnit / 2;
+                        return calculatePosition(x, y);
 
-                            if (plasmoid.location === PlasmaCore.Types.RightEdge) {
-                                x = appletTopLeft.x - width - Kirigami.Units.gridUnit/2
-                                if (appletTopLeft.y < screen.height - height) {
-                                    y = appletTopLeft.y
-                                } else {
-                                    y = screen.height - height - Kirigami.Units.gridUnit/5
-                                }
-                            }
-                        }
-                    }
+                    case PlasmaCore.Types.TopEdge:
+                        x = appletTopLeft.x < screen.width - width ? appletTopLeft.x + panelW - Kirigami.Units.gridUnit / 3 : screen.width - width;
+                        y = panelH + Kirigami.Units.gridUnit / 2;
+                        return calculatePosition(x, y);
+
+                    case PlasmaCore.Types.LeftEdge:
+                        x = appletTopLeft.x + panelW + Kirigami.Units.gridUnit / 2;
+                        y = appletTopLeft.y < screen.height - height ? appletTopLeft.y : appletTopLeft.y - height + iconUser.height / 2;
+                        return calculatePosition(x, y);
+
+                    case PlasmaCore.Types.RightEdge:
+                        x = appletTopLeft.x - width - Kirigami.Units.gridUnit / 2;
+                        y = appletTopLeft.y < screen.height - height ? appletTopLeft.y : screen.height - height - Kirigami.Units.gridUnit / 5;
+                        return calculatePosition(x, y);
+
+                    default:
+                        return;
                 }
-            } else {
-               if (menuPos === 2) {
-                   x = horizMidPoint - width / 2;
-                   y = screen.height - height - panelH - Kirigami.Units.gridUnit/2
-                   return Qt.point(x, y);
-            } else{
-               if (menuPos === 1)  {
-                   x = horizMidPoint - width / 2;
-                   y = vertMidPoint - height /2;
+            } else if (menuPos === 2) {
+                x = horizMidPoint - width / 2;
+                y = screen.height - height - panelH - Kirigami.Units.gridUnit / 2;
+                return calculatePosition(x, y);
+            } else if (menuPos === 1) {
+                x = horizMidPoint - width / 2;
+                y = vertMidPoint - height / 2;
+                return calculatePosition(x, y);
             }
-            }
-            }
-            
-
         }
 
         FocusScope {

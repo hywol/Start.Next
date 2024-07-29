@@ -13,7 +13,7 @@
       <choice name="Center" />
       <choice name="CenterBottom" />
     </choices>
-    <default>Center</default>
+    <default>CenterBottom</default>
     </entry>
 
     <entry name="icon" type="String">

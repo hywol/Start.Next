@@ -171,7 +171,7 @@ KCM.SimpleKCM {
 
             Kirigami.FormData.label: i18n("Menu position")
             id: displayPosition
-            visible: false // TODO
+            visible: true
             model: [
                 i18n("Default"),
                 i18n("Center"),
